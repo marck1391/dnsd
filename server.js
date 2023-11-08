@@ -219,11 +219,8 @@ Response.prototype.end = function(value) {
   var msg = convenient.final_response(self, value)
     , data = msg.toBinary()
 
-  if(self.connection.type == 'udp4' && data.length > 512)
-    return self.emit('error', 'UDP responses greater than 512 bytes not yet implemented')
-
-  else if(self.connection.type == 'udp4')
-    self.connection.send(data, 0, data.length, self.connection.remotePort, self.connection.remoteAddress, function(er) {
+  if(self.connection.type == 'udp4')
+    self.connection.send(data, self.connection.remotePort, self.connection.remoteAddress, function(er) {
       if(er)
         self.emit('error', er)
     })
